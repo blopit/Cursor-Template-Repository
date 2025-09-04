@@ -198,6 +198,16 @@ class MVPQuickStart {
     return new Promise(resolve => this.rl.question(query, resolve));
   }
 
+  getAvailableRules() {
+    if (!fs.existsSync(this.rulesDir)) {
+      return [];
+    }
+    
+    return fs.readdirSync(this.rulesDir)
+      .filter(file => file.endsWith('.mdc'))
+      .sort();
+  }
+
   displayArchitectures() {
     console.log('\n🚀 Welcome to the MVP Quick-Start Setup!\n');
     console.log('Available architectures:');
@@ -1143,10 +1153,17 @@ if (require.main === module) {
       // Execute setup steps
       const successSteps = [];
       
+      // Get ALL available local rules
+      const allLocalRules = this.getAvailableRules();
+      
       // Copy awesome rules first
       const awesomeRules = config.awesome_rules || [];
       const copiedAwesomeRules = this.copyAwesomeRules(awesomeRules);
-      const allRules = [...selectedRules, ...copiedAwesomeRules];
+      
+      // Combine: ALL local rules + architecture-specific awesome rules
+      const allRules = [...allLocalRules, ...copiedAwesomeRules];
+      
+      console.log(`📋 Activating ${allLocalRules.length} local rules + ${copiedAwesomeRules.length} awesome rules = ${allRules.length} total rules`);
       
       if (this.activateRules(allRules)) {
         successSteps.push('Rules activated');

@@ -1322,10 +1322,17 @@ if __name__ == '__main__':
             # Execute setup steps
             success_steps = []
             
+            # Get ALL available local rules
+            all_local_rules = self.get_available_rules()
+            
             # Copy awesome rules first
             awesome_rules = config.get('awesome_rules', [])
             copied_awesome_rules = self.copy_awesome_rules(awesome_rules)
-            all_rules = selected_rules + copied_awesome_rules
+            
+            # Combine: ALL local rules + architecture-specific awesome rules
+            all_rules = all_local_rules + copied_awesome_rules
+            
+            print(f"📋 Activating {len(all_local_rules)} local rules + {len(copied_awesome_rules)} awesome rules = {len(all_rules)} total rules")
             
             if self.activate_rules(all_rules):
                 success_steps.append('Rules activated')
