@@ -263,9 +263,11 @@ class MVPQuickStart:
                 flattened[arch_key] = arch_data
         
         # Add popular stacks
-        if 'popular_stacks' in data and 'stacks' in data['popular_stacks']:
-            for stack_key, stack_data in data['popular_stacks']['stacks'].items():
-                flattened[stack_key] = stack_data
+        if 'popular_stacks' in data:
+            popular_stacks = data['popular_stacks']
+            if 'stacks' in popular_stacks:
+                for stack_key, stack_data in popular_stacks['stacks'].items():
+                    flattened[stack_key] = stack_data
         
         # Add legacy presets for backward compatibility
         if 'presets' in data:
@@ -1306,7 +1308,7 @@ if __name__ == '__main__':
             arch_key, config = self.select_architecture()
             
             # Handle custom architecture
-            selected_rules = config['rules']
+            selected_rules = config.get('local_rules', config.get('rules', []))
             if arch_key == 'custom':
                 selected_rules = self.select_custom_rules()
             

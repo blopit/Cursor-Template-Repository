@@ -173,6 +173,11 @@ class MVPQuickStart {
       }
     }
     
+    // Add popular stacks
+    if (data.popular_stacks && data.popular_stacks.stacks) {
+      Object.assign(flattened, data.popular_stacks.stacks);
+    }
+    
     if (data.presets) {
       Object.assign(flattened, data.presets);
     }
