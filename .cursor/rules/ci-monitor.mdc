@@ -1,0 +1,44 @@
+---
+description: Always run and monitor CI checks using the CI monitor after each push and PR update; includes standard commands to start, watch, and auto-analyze CI failures
+alwaysApply: true
+---
+## CI Monitor Usage Rule
+
+- Always start CI monitoring after you push commits or open/update a PR.
+- Use GitHub CLI to check overall status, then run the CI monitor to watch until completion and auto-analyze failures.
+
+### Required Commands
+
+```bash
+# Show checks summary
+gh pr checks <PR_NUMBER>
+
+# Detailed status rollup
+gh pr view <PR_NUMBER> --json statusCheckRollup
+
+# Start the CI Monitor (auto-analyze on failure)
+cd scripts/monitoring/pr_analysis
+python3 ci_monitor.py <PR_NUMBER> --timeout 1200 --auto-analyze
+```
+
+### Prerequisites
+- GitHub CLI authenticated (`gh auth status`)
+- Python 3 available
+- If needed, create a venv and install requirements in `scripts/monitoring/requirements.txt`
+
+```bash
+cd scripts/monitoring/pr_analysis
+python3 -m venv .venv && . .venv/bin/activate
+pip install -r ../requirements.txt
+python3 ci_monitor.py <PR_NUMBER> --timeout 1200 --auto-analyze
+```
+
+### When To Use
+- After each `git push`
+- After opening or updating a PR
+- When CI shows pending/failing checks
+
+### Success Criteria
+- CI reaches green (all required checks passing)
+- If failures occur, auto-analysis output is reviewed and issues are fixed, then monitor is re-run
+

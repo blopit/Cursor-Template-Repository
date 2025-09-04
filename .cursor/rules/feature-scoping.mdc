@@ -1,0 +1,36 @@
+---
+description: Enforce proper feature scoping and planning before implementation
+alwaysApply: true
+---
+
+# Feature Scoping Process
+
+## Pre-Implementation Requirements
+- Full feature flow documented
+- Multiple approaches considered
+- Clear approach selected
+- Implementation plan ready
+
+## Scoping Steps
+1. Document user flow
+2. List technical requirements
+3. Identify dependencies
+4. Plan implementation
+
+## Implementation Boundaries
+- Clear scope definition
+- Explicit limitations
+- Defined deliverables
+- Success criteria
+
+## Best Practices
+- No scope creep
+- Document decisions
+- Regular scope review
+- Update plans as needed
+
+## Forbidden Practices
+- Coding without plan
+- Unclear boundaries
+- Undocumented changes
+- Scope expansion

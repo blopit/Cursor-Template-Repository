@@ -1,0 +1,604 @@
+{
+  "categories": {
+    "frontend": {
+      "name": "Frontend Frameworks",
+      "description": "Client-side web applications and SPAs",
+      "architectures": {
+        "react": {
+          "name": "React + TypeScript",
+          "description": "Modern React with TypeScript, hooks, and best practices",
+          "local_rules": ["ui-components.mdc", "hooks.mdc", "testing.mdc", "code-writing-standards.mdc"],
+          "awesome_rules": ["react-typescript-cursorrules", "cursor-ai-react-typescript-shadcn-ui-cursorrules-p"],
+          "packages": ["react", "react-dom", "@types/react", "@types/react-dom", "typescript", "vite"],
+          "dev_dependencies": ["@vitejs/plugin-react", "eslint", "prettier"],
+          "scripts": {
+            "dev": "vite",
+            "build": "tsc && vite build",
+            "preview": "vite preview",
+            "test": "jest"
+          }
+        },
+        "vue": {
+          "name": "Vue 3 + TypeScript",
+          "description": "Vue 3 with Composition API, TypeScript, and Vite",
+          "local_rules": ["ui-components.mdc", "testing.mdc", "code-writing-standards.mdc"],
+          "awesome_rules": ["vue-cursorrules-prompt-file"],
+          "packages": ["vue", "typescript"],
+          "dev_dependencies": ["@vitejs/plugin-vue", "vite", "eslint", "prettier"],
+          "scripts": {
+            "dev": "vite",
+            "build": "vue-tsc && vite build",
+            "preview": "vite preview"
+          }
+        },
+        "angular": {
+          "name": "Angular + TypeScript",
+          "description": "Angular with TypeScript, RxJS, and Angular CLI",
+          "local_rules": ["testing.mdc", "code-writing-standards.mdc", "form-handling.mdc"],
+          "awesome_rules": ["angular-novo-elements-cursorrules", "angular-cursorrules-prompt-file-typescript"],
+          "packages": ["@angular/core", "@angular/common", "@angular/forms", "@angular/router"],
+          "dev_dependencies": ["@angular/cli", "typescript"],
+          "scripts": {
+            "dev": "ng serve",
+            "build": "ng build",
+            "test": "ng test"
+          }
+        },
+        "svelte": {
+          "name": "Svelte + TypeScript",
+          "description": "Svelte with TypeScript and SvelteKit",
+          "local_rules": ["ui-components.mdc", "testing.mdc", "code-writing-standards.mdc"],
+          "awesome_rules": ["svelte-cursorrules-prompt-file"],
+          "packages": ["svelte", "typescript"],
+          "dev_dependencies": ["@sveltejs/kit", "vite"],
+          "scripts": {
+            "dev": "vite dev",
+            "build": "vite build",
+            "preview": "vite preview"
+          }
+        }
+      }
+    },
+    "fullstack": {
+      "name": "Full-Stack Frameworks",
+      "description": "Complete web applications with frontend and backend",
+      "architectures": {
+        "nextjs": {
+          "name": "Next.js 15 + React 19",
+          "description": "Next.js with React 19, App Router, and TypeScript",
+          "local_rules": ["project-structure.mdc", "data-fetching.mdc", "form-handling.mdc", "ui-components.mdc", "get-api-route.mdc"],
+          "awesome_rules": ["next-type-llm", "cursor-ai-react-typescript-shadcn-ui-cursorrules-p"],
+          "packages": ["next", "react", "react-dom", "typescript"],
+          "dev_dependencies": ["@types/node", "@types/react", "@types/react-dom", "eslint"],
+          "scripts": {
+            "dev": "next dev",
+            "build": "next build",
+            "start": "next start",
+            "lint": "next lint"
+          }
+        },
+        "nuxtjs": {
+          "name": "Nuxt.js + Vue 3",
+          "description": "Nuxt.js with Vue 3, TypeScript, and server-side rendering",
+          "local_rules": ["project-structure.mdc", "data-fetching.mdc", "ui-components.mdc"],
+          "awesome_rules": ["nuxt-cursorrules-prompt-file"],
+          "packages": ["nuxt", "vue", "typescript"],
+          "dev_dependencies": ["@nuxt/devtools"],
+          "scripts": {
+            "dev": "nuxt dev",
+            "build": "nuxt build",
+            "preview": "nuxt preview"
+          }
+        },
+        "remix": {
+          "name": "Remix + React",
+          "description": "Remix with React, TypeScript, and web standards",
+          "local_rules": ["data-fetching.mdc", "form-handling.mdc", "ui-components.mdc"],
+          "awesome_rules": ["remix-cursorrules-prompt-file"],
+          "packages": ["@remix-run/node", "@remix-run/react", "react", "react-dom"],
+          "dev_dependencies": ["@remix-run/dev", "typescript"],
+          "scripts": {
+            "dev": "remix dev",
+            "build": "remix build",
+            "start": "remix-serve build"
+          }
+        },
+        "t3-stack": {
+          "name": "T3 Stack (Next.js + tRPC + Prisma)",
+          "description": "The T3 stack with Next.js, tRPC, Prisma, and TypeScript",
+          "local_rules": ["project-structure.mdc", "data-fetching.mdc", "form-handling.mdc"],
+          "awesome_rules": ["next-type-llm", "trpc-cursorrules-prompt-file"],
+          "packages": ["next", "react", "react-dom", "@trpc/server", "@trpc/client", "prisma"],
+          "dev_dependencies": ["typescript", "@types/node", "@types/react"],
+          "scripts": {
+            "dev": "next dev",
+            "build": "next build",
+            "db:push": "prisma db push",
+            "db:studio": "prisma studio"
+          }
+        }
+      }
+    },
+    "mobile": {
+      "name": "Mobile Development",
+      "description": "iOS, Android, and cross-platform mobile apps",
+      "architectures": {
+        "react-native": {
+          "name": "React Native + Expo",
+          "description": "Cross-platform mobile apps with React Native and Expo",
+          "local_rules": ["expo-development.mdc", "react-native-testing.mdc", "mobile-first.mdc", "ui-components.mdc"],
+          "awesome_rules": ["react-native-cursorrules-prompt-file"],
+          "packages": ["expo", "@expo/vector-icons", "react-native"],
+          "dev_dependencies": ["@types/react", "@types/react-native"],
+          "scripts": {
+            "dev": "expo start",
+            "android": "expo start --android",
+            "ios": "expo start --ios",
+            "test": "jest"
+          }
+        },
+        "flutter": {
+          "name": "Flutter + Dart",
+          "description": "Cross-platform mobile apps with Flutter and Dart",
+          "local_rules": ["mobile-first.mdc", "testing.mdc", "code-writing-standards.mdc"],
+          "awesome_rules": ["flutter-cursorrules-prompt-file"],
+          "requirements": ["flutter"],
+          "scripts": {
+            "dev": "flutter run",
+            "build-android": "flutter build apk",
+            "build-ios": "flutter build ios",
+            "test": "flutter test"
+          }
+        },
+        "swift-uikit": {
+          "name": "iOS + UIKit",
+          "description": "Native iOS apps with Swift and UIKit",
+          "local_rules": ["mobile-first.mdc", "testing.mdc", "code-writing-standards.mdc"],
+          "awesome_rules": ["swift-cursorrules-prompt-file-uikit"],
+          "scripts": {
+            "test": "xcodebuild test",
+            "build": "xcodebuild build"
+          }
+        },
+        "swift-swiftui": {
+          "name": "iOS + SwiftUI",
+          "description": "Modern iOS apps with Swift and SwiftUI",
+          "local_rules": ["mobile-first.mdc", "testing.mdc", "code-writing-standards.mdc"],
+          "awesome_rules": ["swift-cursorrules-prompt-file-swiftui"],
+          "scripts": {
+            "test": "xcodebuild test",
+            "build": "xcodebuild build"
+          }
+        },
+        "android-compose": {
+          "name": "Android + Jetpack Compose",
+          "description": "Modern Android apps with Kotlin and Jetpack Compose",
+          "local_rules": ["mobile-first.mdc", "testing.mdc", "code-writing-standards.mdc"],
+          "awesome_rules": ["android-jetpack-compose-cursorrules"],
+          "scripts": {
+            "build": "./gradlew build",
+            "test": "./gradlew test"
+          }
+        }
+      }
+    },
+    "backend": {
+      "name": "Backend & API",
+      "description": "Server-side applications and APIs",
+      "architectures": {
+        "fastapi": {
+          "name": "FastAPI + Python",
+          "description": "Modern Python API with FastAPI, async/await, and type hints",
+          "local_rules": ["environment-variables.mdc", "security.mdc", "testing.mdc", "code-writing-standards.mdc"],
+          "awesome_rules": ["python-fastapi-cursorrules-prompt-file"],
+          "requirements": ["fastapi", "uvicorn", "python-multipart", "python-dotenv", "pytest", "httpx"],
+          "scripts": {
+            "dev": "uvicorn main:app --reload",
+            "test": "python -m pytest",
+            "lint": "flake8 .",
+            "start": "uvicorn main:app --host 0.0.0.0 --port 8000"
+          }
+        },
+        "django": {
+          "name": "Django + Python",
+          "description": "Full-featured Python web framework with ORM and admin",
+          "local_rules": ["environment-variables.mdc", "security.mdc", "testing.mdc", "data-fetching.mdc"],
+          "awesome_rules": ["python-django-cursorrules-prompt-file"],
+          "requirements": ["django", "djangorestframework", "django-cors-headers", "python-dotenv", "pytest-django"],
+          "scripts": {
+            "dev": "python manage.py runserver",
+            "migrate": "python manage.py migrate",
+            "test": "python -m pytest",
+            "makemigrations": "python manage.py makemigrations"
+          }
+        },
+        "flask": {
+          "name": "Flask + Python",
+          "description": "Lightweight Python web framework",
+          "local_rules": ["environment-variables.mdc", "security.mdc", "testing.mdc"],
+          "awesome_rules": ["python-flask-cursorrules-prompt-file"],
+          "requirements": ["flask", "flask-cors", "python-dotenv", "pytest", "gunicorn"],
+          "scripts": {
+            "dev": "flask run --debug",
+            "test": "python -m pytest",
+            "start": "gunicorn app:app"
+          }
+        },
+        "expressjs": {
+          "name": "Express.js + Node.js",
+          "description": "Fast, minimalist web framework for Node.js",
+          "local_rules": ["environment-variables.mdc", "security.mdc", "testing.mdc", "get-api-route.mdc"],
+          "awesome_rules": ["express-cursorrules-prompt-file"],
+          "packages": ["express", "cors", "dotenv"],
+          "dev_dependencies": ["nodemon", "jest", "supertest"],
+          "scripts": {
+            "dev": "nodemon app.js",
+            "start": "node app.js",
+            "test": "jest"
+          }
+        },
+        "nestjs": {
+          "name": "NestJS + TypeScript",
+          "description": "Progressive Node.js framework with TypeScript and decorators",
+          "local_rules": ["environment-variables.mdc", "security.mdc", "testing.mdc"],
+          "awesome_rules": ["nestjs-cursorrules-prompt-file"],
+          "packages": ["@nestjs/core", "@nestjs/common", "@nestjs/platform-express"],
+          "dev_dependencies": ["@nestjs/cli", "typescript"],
+          "scripts": {
+            "dev": "nest start --watch",
+            "build": "nest build",
+            "start": "node dist/main",
+            "test": "jest"
+          }
+        },
+        "springboot": {
+          "name": "Spring Boot + Java",
+          "description": "Java framework for building microservices and web applications",
+          "local_rules": ["environment-variables.mdc", "security.mdc", "testing.mdc"],
+          "awesome_rules": ["java-spring-boot-cursorrules"],
+          "scripts": {
+            "dev": "./mvnw spring-boot:run",
+            "build": "./mvnw clean package",
+            "test": "./mvnw test"
+          }
+        },
+        "rails": {
+          "name": "Ruby on Rails",
+          "description": "Full-stack web framework written in Ruby",
+          "local_rules": ["environment-variables.mdc", "security.mdc", "testing.mdc"],
+          "awesome_rules": ["ruby-rails-cursorrules-prompt-file"],
+          "scripts": {
+            "dev": "rails server",
+            "build": "rails assets:precompile",
+            "test": "rails test"
+          }
+        },
+        "laravel": {
+          "name": "Laravel + PHP",
+          "description": "Elegant PHP web framework with expressive syntax",
+          "local_rules": ["environment-variables.mdc", "security.mdc", "testing.mdc"],
+          "awesome_rules": ["laravel-cursorrules-prompt-file"],
+          "scripts": {
+            "dev": "php artisan serve",
+            "test": "php artisan test"
+          }
+        }
+      }
+    },
+    "serverless": {
+      "name": "Serverless & Cloud Functions",
+      "description": "Serverless applications and cloud functions",
+      "architectures": {
+        "vercel-functions": {
+          "name": "Vercel Functions + Python",
+          "description": "Serverless functions deployed on Vercel with Python",
+          "local_rules": ["get-api-route.mdc", "environment-variables.mdc", "security.mdc"],
+          "awesome_rules": ["python-vercel-cursorrules-prompt-file"],
+          "requirements": ["fastapi", "python-multipart", "pytest"],
+          "packages": ["vercel"],
+          "scripts": {
+            "dev": "vercel dev",
+            "deploy": "vercel --prod",
+            "test": "python -m pytest"
+          }
+        },
+        "netlify-functions": {
+          "name": "Netlify Functions + Node.js",
+          "description": "Serverless functions deployed on Netlify",
+          "local_rules": ["environment-variables.mdc", "security.mdc", "testing.mdc"],
+          "awesome_rules": ["netlify-functions-cursorrules"],
+          "packages": ["netlify-cli"],
+          "scripts": {
+            "dev": "netlify dev",
+            "deploy": "netlify deploy --prod",
+            "test": "jest"
+          }
+        },
+        "aws-lambda": {
+          "name": "AWS Lambda + Node.js",
+          "description": "Serverless functions on AWS Lambda",
+          "local_rules": ["environment-variables.mdc", "security.mdc", "testing.mdc"],
+          "awesome_rules": ["aws-lambda-cursorrules"],
+          "packages": ["aws-sdk"],
+          "dev_dependencies": ["serverless"],
+          "scripts": {
+            "deploy": "serverless deploy",
+            "invoke": "serverless invoke local",
+            "test": "jest"
+          }
+        }
+      }
+    },
+    "database": {
+      "name": "Database & ORM",
+      "description": "Database-focused applications with ORMs",
+      "architectures": {
+        "prisma-postgresql": {
+          "name": "Prisma + PostgreSQL",
+          "description": "Type-safe database access with Prisma and PostgreSQL",
+          "local_rules": ["environment-variables.mdc", "security.mdc", "data-fetching.mdc"],
+          "awesome_rules": ["prisma-cursorrules-prompt-file"],
+          "packages": ["prisma", "@prisma/client"],
+          "scripts": {
+            "db:generate": "prisma generate",
+            "db:push": "prisma db push",
+            "db:studio": "prisma studio",
+            "db:migrate": "prisma migrate dev"
+          }
+        },
+        "supabase": {
+          "name": "Supabase + PostgreSQL",
+          "description": "Open source Firebase alternative with PostgreSQL",
+          "local_rules": ["environment-variables.mdc", "security.mdc", "data-fetching.mdc"],
+          "awesome_rules": ["supabase-cursorrules-prompt-file"],
+          "packages": ["@supabase/supabase-js"],
+          "scripts": {
+            "db:start": "supabase start",
+            "db:stop": "supabase stop",
+            "db:status": "supabase status"
+          }
+        }
+      }
+    },
+    "testing": {
+      "name": "Testing Frameworks",
+      "description": "Testing-focused setups and frameworks",
+      "architectures": {
+        "cypress": {
+          "name": "Cypress E2E Testing",
+          "description": "End-to-end testing with Cypress",
+          "local_rules": ["testing.mdc", "testing-workflow.mdc"],
+          "awesome_rules": ["cypress-cursorrules-prompt-file"],
+          "dev_dependencies": ["cypress"],
+          "scripts": {
+            "test:e2e": "cypress run",
+            "test:e2e:open": "cypress open"
+          }
+        },
+        "playwright": {
+          "name": "Playwright E2E Testing",
+          "description": "End-to-end testing with Playwright",
+          "local_rules": ["testing.mdc", "testing-workflow.mdc"],
+          "awesome_rules": ["playwright-cursorrules-prompt-file"],
+          "dev_dependencies": ["@playwright/test"],
+          "scripts": {
+            "test:e2e": "playwright test",
+            "test:e2e:ui": "playwright test --ui"
+          }
+        }
+      }
+    },
+    "blockchain": {
+      "name": "Blockchain & Web3",
+      "description": "Decentralized applications and smart contracts",
+      "architectures": {
+        "solidity-hardhat": {
+          "name": "Solidity + Hardhat",
+          "description": "Smart contract development with Solidity and Hardhat",
+          "local_rules": ["security.mdc", "testing.mdc", "code-writing-standards.mdc"],
+          "awesome_rules": ["solidity-hardhat-cursorrules"],
+          "packages": ["hardhat", "@nomiclabs/hardhat-ethers", "ethers"],
+          "scripts": {
+            "compile": "hardhat compile",
+            "test": "hardhat test",
+            "deploy": "hardhat run scripts/deploy.js"
+          }
+        },
+        "solidity-foundry": {
+          "name": "Solidity + Foundry",
+          "description": "Fast smart contract development with Foundry",
+          "local_rules": ["security.mdc", "testing.mdc"],
+          "awesome_rules": ["solidity-foundry-cursorrules"],
+          "scripts": {
+            "build": "forge build",
+            "test": "forge test",
+            "deploy": "forge script script/Deploy.s.sol --broadcast"
+          }
+        }
+      }
+    },
+    "languages": {
+      "name": "Language-Specific",
+      "description": "Language-specific development setups",
+      "architectures": {
+        "python-general": {
+          "name": "Python General Purpose",
+          "description": "General Python development with best practices",
+          "local_rules": ["code-writing-standards.mdc", "testing.mdc", "environment-variables.mdc"],
+          "awesome_rules": ["python-projects-guide-cursorrules-prompt-file", "python-cursorrules-prompt-file-best-practices"],
+          "requirements": ["pytest", "black", "flake8", "mypy"],
+          "scripts": {
+            "test": "python -m pytest",
+            "lint": "flake8 .",
+            "format": "black .",
+            "type-check": "mypy ."
+          }
+        },
+        "typescript": {
+          "name": "TypeScript",
+          "description": "TypeScript development with strict configuration",
+          "local_rules": ["code-writing-standards.mdc", "testing.mdc"],
+          "awesome_rules": ["typescript-cursorrules-prompt-file"],
+          "packages": ["typescript"],
+          "dev_dependencies": ["@types/node", "ts-node", "jest", "@types/jest"],
+          "scripts": {
+            "build": "tsc",
+            "dev": "ts-node src/index.ts",
+            "test": "jest"
+          }
+        },
+        "go": {
+          "name": "Go",
+          "description": "Go development with standard toolchain",
+          "local_rules": ["code-writing-standards.mdc", "testing.mdc"],
+          "awesome_rules": ["go-cursorrules-prompt-file"],
+          "scripts": {
+            "build": "go build",
+            "run": "go run main.go",
+            "test": "go test ./...",
+            "fmt": "go fmt ./..."
+          }
+        },
+        "rust": {
+          "name": "Rust",
+          "description": "Rust development with Cargo",
+          "local_rules": ["code-writing-standards.mdc", "testing.mdc"],
+          "awesome_rules": ["rust-cursorrules-prompt-file"],
+          "scripts": {
+            "build": "cargo build",
+            "run": "cargo run",
+            "test": "cargo test",
+            "fmt": "cargo fmt"
+          }
+        }
+      }
+    }
+  },
+  "popular_stacks": {
+    "name": "Popular Tech Stacks",
+    "description": "Pre-configured combinations of popular architectures",
+    "stacks": {
+      "mern": {
+        "name": "MERN Stack",
+        "description": "MongoDB, Express.js, React, Node.js - Full JavaScript stack",
+        "local_rules": ["project-structure.mdc", "data-fetching.mdc", "ui-components.mdc", "testing.mdc"],
+        "awesome_rules": ["react-typescript-cursorrules", "express-cursorrules-prompt-file"],
+        "packages": ["react", "react-dom", "express", "mongoose", "cors"],
+        "dev_dependencies": ["@vitejs/plugin-react", "nodemon", "concurrently"],
+        "scripts": {
+          "dev": "concurrently \"npm run server\" \"npm run client\"",
+          "server": "nodemon server.js",
+          "client": "vite",
+          "build": "vite build",
+          "test": "jest"
+        },
+        "components": ["React Frontend", "Express.js Backend", "MongoDB Database"]
+      },
+      "mean": {
+        "name": "MEAN Stack", 
+        "description": "MongoDB, Express.js, Angular, Node.js - Enterprise JavaScript stack",
+        "local_rules": ["project-structure.mdc", "data-fetching.mdc", "form-handling.mdc", "testing.mdc"],
+        "awesome_rules": ["angular-cursorrules-prompt-file-typescript", "express-cursorrules-prompt-file"],
+        "packages": ["@angular/core", "@angular/common", "express", "mongoose", "cors"],
+        "dev_dependencies": ["@angular/cli", "nodemon", "concurrently"],
+        "scripts": {
+          "dev": "concurrently \"npm run server\" \"ng serve\"",
+          "server": "nodemon server.js",
+          "build": "ng build",
+          "test": "ng test && jest"
+        },
+        "components": ["Angular Frontend", "Express.js Backend", "MongoDB Database"]
+      },
+      "t3-stack": {
+        "name": "T3 Stack",
+        "description": "Next.js, TypeScript, tRPC, Prisma - Type-safe full-stack",
+        "local_rules": ["project-structure.mdc", "data-fetching.mdc", "form-handling.mdc", "testing.mdc"],
+        "awesome_rules": ["next-type-llm", "trpc-cursorrules-prompt-file", "prisma-cursorrules-prompt-file"],
+        "packages": ["next", "react", "@trpc/server", "@trpc/client", "prisma", "@prisma/client"],
+        "dev_dependencies": ["typescript", "@types/node", "@types/react"],
+        "scripts": {
+          "dev": "next dev",
+          "build": "next build",
+          "db:push": "prisma db push",
+          "db:studio": "prisma studio",
+          "test": "jest"
+        },
+        "components": ["Next.js Frontend", "tRPC API", "Prisma ORM", "PostgreSQL"]
+      },
+      "django-react": {
+        "name": "Django + React",
+        "description": "Django REST backend with React frontend - Python + JavaScript",
+        "local_rules": ["project-structure.mdc", "data-fetching.mdc", "ui-components.mdc", "testing.mdc"],
+        "awesome_rules": ["python-django-cursorrules-prompt-file", "react-typescript-cursorrules"],
+        "packages": ["react", "react-dom", "axios"],
+        "requirements": ["django", "djangorestframework", "django-cors-headers", "python-dotenv"],
+        "dev_dependencies": ["@vitejs/plugin-react", "vite"],
+        "scripts": {
+          "dev": "concurrently \"python manage.py runserver\" \"vite\"",
+          "build": "vite build",
+          "test": "jest && python manage.py test"
+        },
+        "components": ["React Frontend", "Django REST Backend", "PostgreSQL"]
+      },
+      "fastapi-react": {
+        "name": "FastAPI + React",
+        "description": "FastAPI backend with React frontend - Modern Python + JavaScript",
+        "local_rules": ["project-structure.mdc", "data-fetching.mdc", "ui-components.mdc", "testing.mdc"],
+        "awesome_rules": ["python-fastapi-cursorrules-prompt-file", "react-typescript-cursorrules"],
+        "packages": ["react", "react-dom", "axios"],
+        "requirements": ["fastapi", "uvicorn", "sqlalchemy", "python-dotenv", "pytest"],
+        "dev_dependencies": ["@vitejs/plugin-react", "vite"],
+        "scripts": {
+          "dev": "concurrently \"uvicorn main:app --reload\" \"vite\"",
+          "build": "vite build",
+          "test": "jest && pytest"
+        },
+        "components": ["React Frontend", "FastAPI Backend", "SQLAlchemy ORM"]
+      },
+      "nextjs-supabase": {
+        "name": "Next.js + Supabase",
+        "description": "Next.js with Supabase backend - Full-stack with real-time features",
+        "local_rules": ["project-structure.mdc", "data-fetching.mdc", "ui-components.mdc", "testing.mdc"],
+        "awesome_rules": ["next-type-llm", "supabase-cursorrules-prompt-file"],
+        "packages": ["next", "react", "@supabase/supabase-js", "@supabase/auth-helpers-nextjs"],
+        "dev_dependencies": ["typescript", "@types/react"],
+        "scripts": {
+          "dev": "next dev",
+          "build": "next build",
+          "start": "next start",
+          "test": "jest"
+        },
+        "components": ["Next.js Frontend", "Supabase Backend", "PostgreSQL", "Auth"]
+      },
+      "jamstack": {
+        "name": "JAMStack (Next.js + Netlify)",
+        "description": "JavaScript, APIs, and Markup - Static site with dynamic features",
+        "local_rules": ["project-structure.mdc", "data-fetching.mdc", "ui-components.mdc"],
+        "awesome_rules": ["next-type-llm", "netlify-functions-cursorrules"],
+        "packages": ["next", "react", "netlify-cli"],
+        "dev_dependencies": ["typescript", "@types/react"],
+        "scripts": {
+          "dev": "next dev",
+          "build": "next build && next export",
+          "deploy": "netlify deploy --prod --dir=out"
+        },
+        "components": ["Next.js Static Site", "Netlify Functions", "CDN Deployment"]
+      },
+      "mobile-fullstack": {
+        "name": "React Native + Express",
+        "description": "React Native mobile app with Express.js backend",
+        "local_rules": ["expo-development.mdc", "mobile-first.mdc", "testing.mdc"],
+        "awesome_rules": ["react-native-cursorrules-prompt-file", "express-cursorrules-prompt-file"],
+        "packages": ["expo", "react-native", "express", "cors"],
+        "dev_dependencies": ["nodemon", "@types/react-native"],
+        "scripts": {
+          "mobile": "expo start",
+          "server": "nodemon server.js",
+          "dev": "concurrently \"npm run server\" \"npm run mobile\"",
+          "test": "jest"
+        },
+        "components": ["React Native Mobile", "Express.js API", "MongoDB"]
+      }
+    }
+  }
+}

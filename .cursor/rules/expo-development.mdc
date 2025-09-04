@@ -1,0 +1,287 @@
+---
+description: Expo React Native development guidelines for UserProxy MVP
+globs: app/**/*.{tsx,ts,js,jsx}
+alwaysApply: false
+---
+# Expo Development Guidelines
+
+## Project Setup
+
+### Directory Structure
+```
+app/
+├── App.tsx              # Root component
+├── app.json             # Expo configuration
+├── src/
+│   ├── components/      # Reusable UI components
+│   ├── screens/         # Screen components
+│   ├── navigation/      # Navigation setup
+│   ├── services/        # API and external services
+│   ├── hooks/           # Custom React hooks
+│   ├── utils/           # Utility functions
+│   ├── types/           # TypeScript type definitions
+│   ├── theme/           # UI theme and styling
+│   └── assets/          # Images, icons, fonts
+└── assets/              # Expo managed assets
+```
+
+## Navigation
+
+Use Expo Router for file-based routing:
+
+```typescript
+// app/src/navigation/AppNavigator.tsx
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+
+const Stack = createNativeStackNavigator()
+
+export default function AppNavigator() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Tiles" component={TilesScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
+```
+
+## Authentication with Auth0
+
+### Setup
+```typescript
+import { Auth0Provider } from 'react-native-auth0'
+import Constants from 'expo-constants'
+
+const auth0Config = {
+  domain: Constants.expoConfig?.extra?.auth0Domain,
+  clientId: Constants.expoConfig?.extra?.auth0ClientId,
+}
+
+export default function App() {
+  return (
+    <Auth0Provider {...auth0Config}>
+      <AppNavigator />
+    </Auth0Provider>
+  )
+}
+```
+
+### Usage in Components
+```typescript
+import { useAuth0 } from 'react-native-auth0'
+
+export function LoginScreen() {
+  const { authorize, clearSession, user, isLoading } = useAuth0()
+
+  const handleLogin = async () => {
+    try {
+      await authorize()
+    } catch (error) {
+      console.error('Login failed:', error)
+    }
+  }
+
+  if (isLoading) return <LoadingSpinner />
+  
+  return user ? <DashboardScreen /> : <LoginButton onPress={handleLogin} />
+}
+```
+
+## API Integration
+
+### Service Layer Pattern
+```typescript
+// app/src/services/api.ts
+import Constants from 'expo-constants'
+
+const API_URL = Constants.expoConfig?.extra?.apiUrl
+
+class ApiService {
+  private async request(endpoint: string, options: RequestInit = {}) {
+    const url = `${API_URL}${endpoint}`
+    
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    })
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`)
+    }
+    
+    return response.json()
+  }
+
+  async getTiles(authToken: string) {
+    return this.request('/api/tiles', {
+      headers: { Authorization: `Bearer ${authToken}` }
+    })
+  }
+}
+
+export const apiService = new ApiService()
+```
+
+## Gesture Handling for Tiles
+
+### Swipe Gestures
+```typescript
+import { PanGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler'
+import Animated, { useSharedValue, useAnimatedStyle, runOnJS } from 'react-native-reanimated'
+
+export function SwipeableTile({ tile, onSwipeRight, onSwipeLeft }) {
+  const translateX = useSharedValue(0)
+
+  const handleGesture = useAnimatedGestureHandler({
+    onStart: (_, context) => {
+      context.startX = translateX.value
+    },
+    onActive: (event, context) => {
+      translateX.value = context.startX + event.translationX
+    },
+    onEnd: (event) => {
+      if (event.translationX > 100) {
+        runOnJS(onSwipeRight)(tile)
+      } else if (event.translationX < -100) {
+        runOnJS(onSwipeLeft)(tile)
+      }
+      translateX.value = withSpring(0)
+    },
+  })
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+  }))
+
+  return (
+    <GestureHandlerRootView>
+      <PanGestureHandler onGestureEvent={handleGesture}>
+        <Animated.View style={[styles.tile, animatedStyle]}>
+          {/* Tile content */}
+        </Animated.View>
+      </PanGestureHandler>
+    </GestureHandlerRootView>
+  )
+}
+```
+
+## Push Notifications
+
+### Setup
+```typescript
+import * as Notifications from 'expo-notifications'
+import { Platform } from 'react-native'
+
+// Configure notification behavior
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+})
+
+export async function registerForPushNotifications() {
+  if (Platform.OS === 'android') {
+    await Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+    })
+  }
+
+  const { status: existingStatus } = await Notifications.getPermissionsAsync()
+  let finalStatus = existingStatus
+
+  if (existingStatus !== 'granted') {
+    const { status } = await Notifications.requestPermissionsAsync()
+    finalStatus = status
+  }
+
+  if (finalStatus !== 'granted') {
+    throw new Error('Permission not granted for push notifications')
+  }
+
+  const token = await Notifications.getExpoPushTokenAsync()
+  return token.data
+}
+```
+
+## Performance Optimization
+
+### Image Optimization
+```typescript
+import { Image } from 'expo-image'
+
+// Use Expo Image for better performance
+<Image
+  source={{ uri: imageUrl }}
+  style={{ width: 100, height: 100 }}
+  contentFit="cover"
+  transition={200}
+  cachePolicy="memory-disk"
+/>
+```
+
+### List Performance
+```typescript
+import { FlashList } from '@shopify/flash-list'
+
+// Use FlashList for better performance than FlatList
+<FlashList
+  data={tiles}
+  renderItem={({ item }) => <TileComponent tile={item} />}
+  estimatedItemSize={200}
+  keyExtractor={(item) => item.id}
+/>
+```
+
+## Development Workflow
+
+### Running the App
+```bash
+# Start development server
+cd app
+npm start
+
+# Run on specific platforms
+npm run ios       # iOS simulator
+npm run android   # Android emulator
+npm run web       # Web browser
+```
+
+### Debugging
+- Use Flipper for React Native debugging
+- Enable remote debugging in development builds
+- Use Expo Dev Tools for live inspection
+
+### Environment Management
+- Use different app configurations for dev/staging/prod
+- Implement feature flags for gradual rollouts
+- Test on physical devices regularly
+
+## Code Quality
+
+### TypeScript Configuration
+- Enable strict mode
+- Use proper type definitions for all props and state
+- Leverage Expo SDK types
+
+### Testing
+```typescript
+// Example component test
+import { render, screen } from '@testing-library/react-native'
+import { TileComponent } from './TileComponent'
+
+test('renders tile with correct content', () => {
+  const mockTile = { id: '1', title: 'Test Tile', content: 'Test content' }
+  render(<TileComponent tile={mockTile} />)
+  
+  expect(screen.getByText('Test Tile')).toBeOnTheScreen()
+})
+```

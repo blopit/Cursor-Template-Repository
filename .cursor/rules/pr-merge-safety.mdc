@@ -1,0 +1,59 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# 🚨 CRITICAL PR Merge Safety Rule
+
+## ⛔ NEVER MERGE WITHOUT CURSOR BUG REVIEW
+
+### **MANDATORY Pre-Merge Checklist:**
+- [ ] **ALWAYS run Cursor bug analysis**: `python cursor_bug_analyzer.py --pr <PR_NUMBER>`
+- [ ] **READ ALL bug reports completely** - do not skip any details
+- [ ] **Assess severity** of each reported issue
+- [ ] **Create fix plan** for critical/high severity bugs before merging
+- [ ] **Document decision** if proceeding despite bugs
+
+### **Bug Severity Guidelines:**
+- **CRITICAL** - Merge conflicts, syntax errors, race conditions, security issues
+- **HIGH** - Logic flaws, interface violations, data corruption risks  
+- **MEDIUM** - Performance issues, inconsistent behavior
+- **LOW** - Code style, minor inefficiencies
+
+### **Actions by Severity:**
+- **CRITICAL/HIGH**: 🛑 **MUST FIX BEFORE MERGE**
+- **MEDIUM**: 📋 Create follow-up issue, can merge with approval
+- **LOW**: 📝 Note for future improvement, safe to merge
+
+### **Example Pre-Merge Commands:**
+```bash
+# Always run before merging ANY PR
+cd scripts/monitoring/pr_analysis
+python cursor_bug_analyzer.py --pr <PR_NUMBER>
+
+# Read the full report (archived Mantra project reports)
+cat ../../reports/archived/mantra-project/cursor-bug-analysis/cursor_bug_report_*.md
+
+# Only merge after review
+gh pr merge <PR_NUMBER> --squash --delete-branch
+```
+
+### **Emergency Response:**
+If critical bugs are discovered AFTER merge:
+1. **Immediate**: Create hotfix branch
+2. **Document**: Update this rule with lessons learned  
+3. **Fix**: Address all critical issues before next deployment
+4. **Review**: Update merge process to prevent recurrence
+
+## **Lesson Learned:**
+PR #62 was merged with multiple critical bugs including:
+- Rate limiter logic flaws
+- Merge conflict markers in code
+- Interface contract violations
+- Race conditions
+
+**This rule prevents such critical oversights in the future.**
+
+## **Related Rules:**
+- [git-automation](mdc:.cursor/rules/git-automation.mdc)
+- [general-code-style-and-readability](mdc:.cursor/rules/general-code-style-and-readability.mdc)

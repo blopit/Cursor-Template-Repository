@@ -1,0 +1,226 @@
+---
+description: Systematic workflow for debugging and fixing CI failures
+globs: 
+  - "**/*.yml"
+  - "**/*.yaml" 
+  - ".github/workflows/**"
+  - "package.json"
+  - "**/package.json"
+  - "**/*test*"
+  - "**/*spec*"
+alwaysApply: false
+---
+
+# CI Debugging Workflow
+
+## Core Principle
+**Always reproduce and fix locally before pushing to CI**
+
+## Pre-Push Verification Checklist
+
+### 1. Local Testing Requirements
+Before every push, run these commands locally:
+
+```bash
+# For React Native apps
+cd app
+npm run lint                    # ESLint checks
+npm run format:check           # Prettier formatting
+npm test -- --coverage --watchAll=false  # Test suite
+
+# For API/Backend
+cd api  
+python -m pytest              # Python tests
+flake8 .                      # Python linting
+```
+
+### 2. Multi-Environment Testing
+- Test on both Node 18.x and 20.x if supported
+- Verify Python versions match CI configuration
+- Check that all dependencies install cleanly
+
+## CI Failure Analysis Workflow
+
+### Step 1: Identify Failure Category
+Check CI status and categorize failures:
+
+- 🔴 **Tests**: Unit/integration test failures
+- 🔴 **Linting**: ESLint, flake8, or similar code quality issues
+- 🔴 **Formatting**: Prettier, black, or code style issues  
+- 🔴 **Security**: Dependency vulnerability scans
+- 🔴 **Build**: Compilation or dependency installation issues
+- 🔴 **Deployment**: Infrastructure or deployment-specific issues
+
+### Step 2: Get Detailed Logs
+```bash
+gh pr checks #<PR_NUMBER>              # Overview of all checks
+gh run view --log-failed               # Detailed failure logs
+gh run view <RUN_ID>                   # Specific run details
+```
+
+### Step 3: Root Cause Analysis
+Look for specific error patterns:
+
+**React Native Test Failures:**
+- "Element type is invalid" → Missing component mocks
+- "accessibilityState.disabled undefined" → Incomplete accessibility mocks
+- "className is defined but never used" → ESLint + NativeWind issues
+
+**Python API Failures:**
+- Import errors → Missing dependencies or path issues
+- Security warnings → Outdated dependencies need updates
+
+**Formatting Issues:**
+- Prettier warnings → Code style doesn't match rules
+- ESLint errors → Code quality violations
+
+### Step 4: Local Reproduction
+```bash
+# Reproduce the exact CI command locally
+npm test -- --coverage --watchAll=false
+npm run lint
+npm run format:check
+
+# For Python
+python -m pytest -v
+flake8 . --show-source
+```
+
+### Step 5: Incremental Fixes
+Fix one category at a time:
+
+1. **Tests first** - Get all tests passing
+2. **Linting second** - Fix code quality issues  
+3. **Formatting third** - Apply code style fixes
+4. **Security/deps** - Update vulnerable dependencies
+
+### Step 6: Verify and Push
+```bash
+# Verify all local checks pass
+npm test && npm run lint && npm run format:check
+
+# Commit with clear message
+git add .
+git commit -m "fix: resolve [category] issues for CI"
+git push
+
+# Monitor CI status
+gh pr checks #<PR_NUMBER>
+```
+
+## Common Fix Patterns
+
+### React Native Component Mocking
+```typescript
+// Always include className support for NativeWind
+jest.mock('component-library', () => ({
+  Component: jest.fn(({ className: _className, children, ...props }) => {
+    const React = require('react');
+    return React.createElement('View', props, children);
+  }),
+}));
+```
+
+### ESLint Unused Parameter Fix
+```typescript
+// Use underscore prefix for intentionally unused parameters
+({ className: _className, unusedProp: _unusedProp }) => {
+  // implementation
+}
+```
+
+### Prettier Formatting Fix
+```bash
+# Auto-fix formatting issues
+npx prettier --write "**/*.{js,jsx,ts,tsx,json,md}"
+```
+
+### Security Dependency Updates
+```bash
+npm audit fix                  # Auto-fix known vulnerabilities
+npm update                     # Update to latest compatible versions
+```
+
+## Debugging Tools and Commands
+
+### GitHub CLI Commands
+```bash
+gh pr status                   # Quick status overview
+gh pr checks <PR_NUMBER>       # Detailed check status
+gh run list --branch <BRANCH>  # List recent runs
+gh run view <RUN_ID> --log     # View specific run logs
+```
+
+### Local Development Commands
+```bash
+npm run test:debug            # Run tests with detailed output
+npm run lint:fix              # Auto-fix linting issues
+npm run format:write          # Auto-fix formatting
+npm run type-check            # TypeScript type checking
+```
+
+## Preventive Measures
+
+### 1. Pre-commit Hooks
+Set up git hooks to run checks automatically:
+```json
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": ["eslint --fix", "prettier --write"],
+    "*.{json,md}": ["prettier --write"]
+  }
+}
+```
+
+### 2. IDE Integration
+- Configure ESLint and Prettier in your IDE
+- Enable format-on-save
+- Set up real-time linting feedback
+
+### 3. Documentation
+- Document complex mock setups
+- Keep testing guides updated
+- Share debugging solutions with team
+
+## Team Workflow
+
+### For PR Authors
+1. **Test locally first** - Never push without local verification
+2. **Incremental commits** - Fix one issue category per commit
+3. **Clear commit messages** - Specify what was fixed
+4. **Monitor CI** - Watch checks after pushing
+
+### For Reviewers  
+1. **Check CI status** before reviewing code
+2. **Verify test coverage** meets standards
+3. **Look for proper mocking** patterns
+4. **Ensure documentation** is updated if needed
+
+## Emergency Debugging
+
+### When CI is completely broken:
+1. **Create debug branch** from known good commit
+2. **Add minimal debug tests** to isolate issues
+3. **Bisect commits** to find breaking change
+4. **Apply fixes incrementally** 
+5. **Document root cause** for future prevention
+
+### When tests are flaky:
+1. **Run tests multiple times** locally
+2. **Check for race conditions** in async tests
+3. **Verify mock cleanup** between tests
+4. **Add debugging output** to failing tests
+5. **Consider test isolation** improvements
+
+## Success Metrics
+
+- ✅ All critical CI checks passing (tests, linting, security)
+- ✅ Local commands match CI behavior
+- ✅ Fast feedback loop (< 5 minutes from push to results)
+- ✅ Clear failure messages and debugging info
+- ✅ Preventive measures reduce repeat failures

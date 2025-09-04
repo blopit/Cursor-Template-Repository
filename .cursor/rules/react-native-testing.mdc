@@ -1,0 +1,295 @@
+---
+description: Comprehensive React Native testing guidelines and mocking patterns
+globs:
+  - "**/__tests__/**"
+  - "**/*.test.{js,jsx,ts,tsx}"
+  - "**/*.spec.{js,jsx,ts,tsx}"
+  - "**/setup.{js,ts}"
+  - "**/jest.config.{js,ts}"
+alwaysApply: false
+---
+
+# React Native Testing Standards
+
+## Core Testing Setup
+
+### Essential Setup File (`__tests__/setup.ts`)
+Create comprehensive test setup with all required mocks:
+
+```typescript
+import 'react-native-gesture-handler/jestSetup';
+
+// React Native core mocks with NativeWind className support
+jest.mock('react-native', () => ({
+  StyleSheet: {
+    create: jest.fn(styles => styles),
+    flatten: jest.fn(style => style),
+  },
+  Platform: { OS: 'ios', select: jest.fn(platform => platform.ios || platform.default) },
+  Dimensions: { get: jest.fn(() => ({ width: 375, height: 812 })) },
+  
+  // Components with className support for NativeWind
+  View: jest.fn(({ className: _className, children, ...props }) => {
+    const React = require('react');
+    return React.createElement('View', props, children);
+  }),
+  TouchableOpacity: jest.fn(({ className: _className, children, onPress, disabled, ...props }) => {
+    const React = require('react');
+    return React.createElement('TouchableOpacity', { 
+      ...props, onPress, disabled,
+      accessibilityState: { disabled }  // Critical for accessibility tests
+    }, children);
+  }),
+}));
+```
+
+## Mocking Guidelines
+
+### 1. UI Library Components
+Mock custom UI components to avoid dependency issues:
+
+```typescript
+// GluestackUI Button with accessibility support
+jest.mock('../src/components/ui/button', () => ({
+  Button: jest.fn(({ children, isDisabled, onPress, testID, ...props }) => {
+    const React = require('react');
+    return React.createElement('TouchableOpacity', {
+      disabled: isDisabled,
+      onPress,
+      testID,
+      accessibilityState: { disabled: isDisabled }, // Essential!
+      ...props,
+    }, children);
+  }),
+}));
+```
+
+### 2. NativeWind/Tailwind Support
+All component mocks must handle `className` props:
+
+```typescript
+// ✅ Correct: Handle className with underscore prefix
+({ className: _className, children, ...props }) => {
+  return React.createElement('View', props, children);
+}
+
+// ❌ Wrong: Will cause ESLint warnings
+({ className, children, ...props }) => {
+  return React.createElement('View', props, children);
+}
+```
+
+### 3. Platform APIs
+Mock platform-specific functionality:
+
+```typescript
+jest.mock('react-native-safe-area-context', () => ({
+  SafeAreaProvider: jest.fn(({ children, ...props }) => {
+    const React = require('react');
+    return React.createElement('View', props, children);
+  }),
+  useSafeAreaInsets: jest.fn(() => ({ top: 0, bottom: 0, left: 0, right: 0 })),
+}));
+```
+
+## Test Writing Standards
+
+### 1. Component Testing
+Test components with proper rendering checks:
+
+```typescript
+import React from 'react';
+import { render } from '@testing-library/react-native';
+import { GluestackUIProvider } from '../src/components/ui/gluestack-ui-provider';
+
+// Helper function for consistent provider wrapping
+const renderWithProviders = (ui: React.ReactElement) => {
+  return render(
+    <GluestackUIProvider>
+      {ui}
+    </GluestackUIProvider>
+  );
+};
+
+describe('MyComponent', () => {
+  it('should render without errors', () => {
+    const { getByText } = renderWithProviders(<MyComponent />);
+    // Test actual rendered content, not assumptions
+    expect(getByText('Actual Button Text')).toBeTruthy();
+  });
+  
+  it('should handle accessibility states', () => {
+    const { getByRole } = renderWithProviders(<MyComponent disabled />);
+    const button = getByRole('button');
+    expect(button.props.accessibilityState.disabled).toBe(true);
+  });
+});
+```
+
+### 2. Async Testing
+Handle async operations properly:
+
+```typescript
+it('should handle async operations', async () => {
+  const { getByText, waitFor } = renderWithProviders(<AsyncComponent />);
+  
+  fireEvent.press(getByText('Load Data'));
+  
+  await waitFor(() => {
+    expect(getByText('Data Loaded')).toBeTruthy();
+  });
+});
+```
+
+### 3. Mock Verification
+Verify mocks are called correctly:
+
+```typescript
+it('should call onPress when button is pressed', () => {
+  const mockOnPress = jest.fn();
+  const { getByText } = renderWithProviders(
+    <Button onPress={mockOnPress}>Press me</Button>
+  );
+  
+  fireEvent.press(getByText('Press me'));
+  expect(mockOnPress).toHaveBeenCalledTimes(1);
+});
+```
+
+## Common Issues and Solutions
+
+### Issue: "Element type is invalid"
+**Cause**: Missing or incorrect component mocks
+**Solution**: Ensure all custom components are mocked properly
+
+```typescript
+// Debug with a simple test
+it('should import component successfully', async () => {
+  const { MyComponent } = await import('../src/components/MyComponent');
+  expect(MyComponent).toBeDefined();
+  expect(typeof MyComponent).toBe('function');
+});
+```
+
+### Issue: AccessibilityState Undefined
+**Cause**: TouchableOpacity mocks missing accessibility properties
+**Solution**: Always include accessibilityState in TouchableOpacity mocks
+
+```typescript
+TouchableOpacity: jest.fn(({ disabled, ...props }) => {
+  return React.createElement('TouchableOpacity', {
+    ...props,
+    disabled,
+    accessibilityState: { disabled }, // This is required!
+  });
+});
+```
+
+### Issue: ESLint "className defined but never used"
+**Cause**: NativeWind adds className props that aren't used in mocks
+**Solution**: Prefix with underscore
+
+```typescript
+// ✅ Correct
+({ className: _className, ...props }) => { }
+
+// ❌ Will cause ESLint error
+({ className, ...props }) => { }
+```
+
+## Performance Optimization
+
+### 1. Efficient Mocking
+- Mock at the module level, not per-test
+- Use string mocks for simple components: `'ComponentName'`
+- Only create complex mocks when needed
+
+### 2. Test Isolation
+```typescript
+describe('Component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks(); // Clear mock call history
+  });
+});
+```
+
+### 3. Selective Testing
+```typescript
+// Run tests in silent mode for faster execution
+npm test -- --silent --watchAll=false
+```
+
+## Integration with CI
+
+### Pre-Push Commands
+Always run locally before pushing:
+
+```bash
+cd app
+npm run lint                           # ESLint checks
+npm run format:check                   # Prettier formatting  
+npm test -- --coverage --watchAll=false  # Full test suite
+```
+
+### Test Coverage Requirements
+- Maintain minimum coverage thresholds
+- Focus on critical user paths
+- Don't test implementation details
+
+## Debugging Failed Tests
+
+### 1. Isolate the Issue
+Create debug tests to understand failures:
+
+```typescript
+// Debug test to check imports
+it('debug: should import all dependencies', async () => {
+  const component = await import('../src/screens/MyScreen');
+  expect(component.MyScreen).toBeDefined();
+});
+```
+
+### 2. Verbose Output
+```bash
+npm test -- --verbose --testPathPattern=MyComponent
+```
+
+### 3. Check Mock Setup
+Verify mocks are applied correctly:
+
+```typescript
+it('debug: should have mocked components', () => {
+  expect(jest.isMockFunction(require('react-native').View)).toBe(true);
+});
+```
+
+## Best Practices
+
+### Do:
+- ✅ Mock extensively - React Native requires more mocks than web
+- ✅ Test user interactions, not implementation
+- ✅ Use descriptive test names
+- ✅ Include accessibility in component mocks
+- ✅ Handle className props for NativeWind compatibility
+- ✅ Verify locally before pushing to CI
+
+### Don't:
+- ❌ Test without proper provider wrappers
+- ❌ Assume component text without checking actual output
+- ❌ Ignore accessibility properties in mocks
+- ❌ Use className parameters without underscore prefix
+- ❌ Push without running local tests first
+
+## Maintenance
+
+### Regular Updates
+- Keep mocks updated when libraries change
+- Review and update test patterns
+- Document new mock patterns discovered
+- Share knowledge across team
+
+### Documentation
+- Document complex mock setups
+- Explain why specific mocks are needed
+- Keep troubleshooting guides current
+- Reference main testing guide for comprehensive patterns

@@ -1,0 +1,31 @@
+---
+description: Enforce scoped, focused conversations with clear boundaries and goals
+alwaysApply: true
+---
+
+# Scoped Conversations
+
+## Core Rules
+- Keep conversations small and focused
+- One feature/issue per conversation
+- Clear scope boundaries
+- Explicit change restrictions
+
+## Best Practices
+- Start new chat for each issue
+- State "Fix X only" explicitly
+- Avoid scope creep
+- Document decisions made
+
+## Implementation Guidelines
+- Define clear goals upfront
+- List files to be modified
+- Specify what NOT to change
+- Review changes for scope adherence
+
+## Conversation Structure
+1. State specific issue/feature
+2. Define scope boundaries
+3. List allowed changes
+4. Document decisions
+5. Verify changes stay in scope

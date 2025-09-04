@@ -1,0 +1,85 @@
+# Created by: claude-3-5-sonnet-20241022
+# Last edited: 2025-08-02 17:24:00 UTC by claude-3-5-sonnet-20241022
+
+description: Mandatory PR workflow with monitoring and validation requirements
+globs: "**"
+alwaysApply: true
+
+# PR Workflow Mandatory Rule
+
+## 🚨 CRITICAL REQUIREMENT
+**NEVER consider a PR or fix complete until ALL CI checks pass**
+
+## Mandatory Workflow Steps
+
+### 1. Before Creating PR
+- **Validate PR title format** using conventional commits or Task XX format
+- **Validate branch name** must start with feat/, fix/, docs/, test/, refactor/
+- **Test locally** to catch obvious issues before CI
+
+### 2. After Pushing Changes
+**MANDATORY: Use PR monitoring tools immediately after any push**
+
+```bash
+# Required sequence after git push
+cd scripts/monitoring/pr_analysis
+
+# Step 1: Quick overview of all PRs
+python3 analyze_all_open_prs.py
+
+# Step 2: Deep analysis of specific PR
+python3 enhanced_pr_analyzer.py <PR_NUMBER>
+
+# Step 3: Smart CI monitoring (no blind waiting)
+python3 ci_monitor.py <PR_NUMBER> --timeout 600 --auto-analyze
+
+# Step 4: If issues found, apply fixes
+python3 smart_pr_fixer.py <PR_NUMBER> --auto-fix
+
+# Step 5: Verify fixes worked
+python3 verify_fixes.py <PR_NUMBER>
+```
+
+### 3. Success Criteria
+**Only complete when achieving:**
+- ✅ All CI checks passing (4✅ 0❌ 0🔄 0⏳)
+- ✅ Test failures: 0 failed tests
+- ✅ Cursor bugs: 0 active bugs
+- ✅ No GitHub Actions deprecation warnings
+- ✅ PR title validation passes
+
+### 4. Required PR Title Formats
+```bash
+# Task-based format
+Task XX: Description of the task
+
+# Conventional commits format  
+feat(scope): description
+fix(scope): description
+docs(scope): description
+test(scope): description
+refactor(scope): description
+```
+
+### 5. Never Do
+- ❌ Push and walk away without monitoring
+- ❌ Sleep/wait blindly for CI completion
+- ❌ Ignore CI failures or assume they'll pass later
+- ❌ Use emoji prefixes in PR titles
+- ❌ Skip validation steps
+
+### 6. Tool Locations
+All PR tools located in: `scripts/monitoring/pr_analysis/`
+- `analyze_all_open_prs.py` - PR overview and triage
+- `enhanced_pr_analyzer.py` - Deep issue analysis with cursor bug detection
+- `ci_monitor.py` - Smart CI monitoring with callbacks
+- `smart_pr_fixer.py` - Automated fix application
+- `verify_fixes.py` - Fix verification
+
+## Integration with Other Rules
+- Follow [git-automation](mdc:.cursor/rules/git-automation.mdc) for commit messages
+- Use [pr-title-validation](mdc:.cursor/rules/pr-title-validation.mdc) patterns
+- Apply [pr-merge-safety](mdc:.cursor/rules/pr-merge-safety.mdc) checks
+
+## Enforcement
+This rule applies to ALL PR-related activities and is mandatory for completion criteria.

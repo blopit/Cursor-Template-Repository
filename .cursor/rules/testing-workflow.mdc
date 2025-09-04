@@ -1,0 +1,307 @@
+---
+description: Testing workflow and quality assurance best practices
+globs:
+  - "**/*test*"
+  - "**/*spec*"
+  - "**/package.json"
+  - "**/.github/workflows/**"
+alwaysApply: false
+---
+
+# Testing Workflow Standards
+
+## Pre-Push Quality Gate
+
+### Mandatory Local Verification
+**NEVER push without running these commands locally first:**
+
+```bash
+# For React Native projects
+cd app
+npm run lint                           # ESLint code quality
+npm run format:check                   # Prettier formatting
+npm test -- --coverage --watchAll=false  # Full test suite with coverage
+
+# For Python API projects  
+cd api
+python -m pytest -v                   # Run test suite
+flake8 . --show-source                # Python linting
+```
+
+### Quality Standards
+- ✅ All tests must pass locally before pushing
+- ✅ No ESLint errors or warnings
+- ✅ Code properly formatted with Prettier
+- ✅ Test coverage meets project minimums
+- ✅ No security vulnerabilities in dependencies
+
+## Testing Strategy
+
+### 1. Test Categories
+**Unit Tests**: Individual component/function testing
+- Mock all external dependencies
+- Test one thing at a time
+- Fast execution (< 1 second per test)
+
+**Integration Tests**: Component interaction testing
+- Mock external services only
+- Test user workflows
+- Moderate execution time
+
+**End-to-End Tests**: Full application testing  
+- Minimal mocking
+- Critical user paths only
+- Slower execution, run less frequently
+
+### 2. React Native Testing Approach
+```typescript
+// ✅ Comprehensive mocking strategy
+import { render } from '@testing-library/react-native';
+
+// Mock external libraries extensively
+jest.mock('react-native', () => ({ /* comprehensive mocks */ }));
+jest.mock('third-party-library', () => ({ /* required mocks */ }));
+
+// Test actual user interactions
+describe('UserInteraction', () => {
+  it('should handle button press', () => {
+    const { getByText } = render(<MyComponent />);
+    fireEvent.press(getByText('Submit'));
+    expect(mockSubmitHandler).toHaveBeenCalled();
+  });
+});
+```
+
+### 3. Test Isolation
+```typescript
+describe('Component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();        // Clear mock call history
+    jest.resetAllMocks();        // Reset mock implementations
+  });
+  
+  afterEach(() => {
+    cleanup();                   // Clean up rendered components
+  });
+});
+```
+
+## CI Integration Best Practices
+
+### 1. Multi-Environment Testing
+```yaml
+strategy:
+  matrix:
+    node-version: [18.x, 20.x]    # Test multiple Node versions
+    os: [ubuntu-latest]           # Consistent OS for React Native
+```
+
+### 2. Fail-Fast Strategy
+Order CI checks by speed and likelihood of failure:
+1. **Linting** (fastest, catches common issues)
+2. **Formatting** (fast, prevents style debates)
+3. **Unit Tests** (fast, catches logic errors)
+4. **Security Scans** (medium, catches vulnerabilities)
+5. **Integration Tests** (slower, catches workflow issues)
+
+### 3. Caching Strategy
+```yaml
+- name: Cache dependencies
+  uses: actions/cache@v3
+  with:
+    path: ~/.npm
+    key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+```
+
+## Debugging Workflow
+
+### 1. Systematic Issue Resolution
+When CI fails, follow this order:
+
+1. **Categorize**: Tests, linting, formatting, security, build
+2. **Reproduce**: Run exact CI commands locally
+3. **Isolate**: Create minimal test case to reproduce issue
+4. **Fix**: Address root cause, not symptoms
+5. **Verify**: Ensure fix works locally before pushing
+6. **Document**: Add to troubleshooting guides
+
+### 2. Debug Test Creation
+```typescript
+// When tests fail mysteriously, create debug tests
+describe('Debug: Component Imports', () => {
+  it('should import component successfully', async () => {
+    const { MyComponent } = await import('../src/components/MyComponent');
+    expect(MyComponent).toBeDefined();
+    expect(typeof MyComponent).toBe('function');
+  });
+});
+
+describe('Debug: Mock Verification', () => {
+  it('should have required mocks', () => {
+    const RN = require('react-native');
+    expect(jest.isMockFunction(RN.View)).toBe(true);
+  });
+});
+```
+
+### 3. Incremental Fixing
+```bash
+# Fix one category at a time
+git add . && git commit -m "fix: resolve test failures"
+git push && gh pr checks #<PR_NUMBER>
+
+# Then fix next category
+git add . && git commit -m "fix: resolve linting issues"  
+git push && gh pr checks #<PR_NUMBER>
+```
+
+## Code Quality Standards
+
+### 1. Test Quality Metrics
+- **Coverage**: Minimum 70% overall, 90% for critical paths
+- **Performance**: Unit tests < 1s, full suite < 30s locally
+- **Maintainability**: Clear test names, minimal setup, isolated tests
+- **Reliability**: No flaky tests, deterministic results
+
+### 2. Mock Quality Standards
+```typescript
+// ✅ Good mock: Includes all required functionality
+jest.mock('ui-library', () => ({
+  Button: jest.fn(({ children, onPress, disabled, ...props }) => {
+    const React = require('react');
+    return React.createElement('TouchableOpacity', {
+      onPress,
+      disabled,
+      accessibilityState: { disabled },  // Include accessibility
+      ...props,
+    }, children);
+  }),
+}));
+
+// ❌ Bad mock: Missing functionality, will cause test failures
+jest.mock('ui-library', () => ({
+  Button: 'Button',  // Too simple, loses functionality
+}));
+```
+
+### 3. Test Naming Conventions
+```typescript
+// ✅ Descriptive test names
+describe('LoginForm', () => {
+  it('should show error message when login fails', () => {});
+  it('should navigate to dashboard on successful login', () => {});
+  it('should disable submit button when form is invalid', () => {});
+});
+
+// ❌ Vague test names  
+describe('LoginForm', () => {
+  it('works', () => {});
+  it('handles errors', () => {});
+});
+```
+
+## Performance Optimization
+
+### 1. Test Execution Speed
+```typescript
+// ✅ Fast test setup
+const renderComponent = (props = {}) => {
+  return render(<MyComponent {...defaultProps} {...props} />);
+};
+
+// ❌ Slow test setup with complex providers
+const renderComponent = (props = {}) => {
+  return render(
+    <Provider1>
+      <Provider2>
+        <Provider3>
+          <MyComponent {...props} />
+        </Provider3>
+      </Provider2>
+    </Provider1>
+  );
+};
+```
+
+### 2. Mock Efficiency
+```typescript
+// ✅ Efficient: String mocks for simple components
+jest.mock('simple-component', () => 'SimpleComponent');
+
+// ✅ Efficient: Function mocks only when needed
+jest.mock('complex-component', () => ({
+  ComplexComponent: jest.fn(({ children }) => children),
+}));
+```
+
+### 3. Test Parallelization
+```json
+{
+  "scripts": {
+    "test": "jest --maxWorkers=4",          // Parallel execution
+    "test:ci": "jest --maxWorkers=2 --ci",  // CI optimized
+  }
+}
+```
+
+## Team Collaboration
+
+### 1. Shared Testing Standards
+- Document all mock patterns in team wiki
+- Review test quality in code reviews
+- Share debugging solutions immediately
+- Maintain common test utilities
+
+### 2. Knowledge Sharing
+```typescript
+// Create shared test utilities
+// __tests__/utils/renderWithProviders.ts
+export const renderWithProviders = (ui: React.ReactElement) => {
+  return render(
+    <AllNecessaryProviders>
+      {ui}
+    </AllNecessaryProviders>
+  );
+};
+```
+
+### 3. Code Review Focus
+- ✅ Test coverage for new features
+- ✅ Proper mock implementations
+- ✅ Clear test intentions
+- ✅ No flaky or unreliable tests
+- ✅ Performance implications
+
+## Maintenance and Evolution
+
+### 1. Regular Updates
+- **Weekly**: Update test dependencies
+- **Monthly**: Review and refactor test utilities
+- **Quarterly**: Analyze test performance and coverage
+- **As needed**: Update mocks when libraries change
+
+### 2. Test Debt Management
+- Identify and fix flaky tests immediately
+- Refactor complex test setups
+- Remove or update obsolete tests
+- Improve test documentation
+
+### 3. Continuous Improvement
+- Monitor CI performance trends
+- Collect developer feedback on testing experience
+- Experiment with new testing tools/patterns
+- Document lessons learned from debugging sessions
+
+## Success Indicators
+
+### Team Level
+- ✅ Developers run tests locally before pushing
+- ✅ CI failures are rare and quickly resolved
+- ✅ Test suite provides confidence in changes
+- ✅ New features include comprehensive tests
+
+### Project Level  
+- ✅ High test coverage with meaningful tests
+- ✅ Fast feedback loop (< 5 minutes)
+- ✅ Minimal flaky or unreliable tests
+- ✅ Clear documentation and debugging guides

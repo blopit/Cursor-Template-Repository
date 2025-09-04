@@ -1,0 +1,36 @@
+---
+description: Enforce investigation and planning before implementing debug fixes
+alwaysApply: true
+---
+
+# Debug First, Implement Later
+
+## Debug Process
+1. Investigate thoroughly
+2. Get multiple solutions
+3. Choose approach
+4. Then implement
+
+## Investigation Steps
+- Gather all errors
+- Check logs
+- Review context
+- Document findings
+
+## Solution Planning
+- List possible fixes
+- Evaluate each option
+- Consider side effects
+- Choose best approach
+
+## Implementation Guidelines
+- Document chosen solution
+- Test thoroughly
+- Verify fix
+- Update docs
+
+## Best Practices
+- No blind fixes
+- Test all solutions
+- Document process
+- Learn from bugs

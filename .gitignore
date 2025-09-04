@@ -1,3 +1,6 @@
+# Created by: claude-3.5-sonnet
+# Last edited: 2024-12-19 15:30:00 UTC by claude-3.5-sonnet
+
 # Logs
 logs
 *.log
@@ -8,9 +11,14 @@ dev-debug.log
 
 # Dependency directories
 node_modules/
+**/.venv/
+/.venv/
+api/.venv/
+scripts/monitoring/pr_analysis/.venv/
 
 # Environment variables
 .env
+.env.*
 
 # Editor directories and files
 .idea
@@ -23,3 +31,24 @@ node_modules/
 
 # OS specific
 .DS_Store
+
+# Python bytecode
+**/__pycache__/
+*.py[cod]
+
+# Test coverage reports (generated)
+app/coverage/
+
+# Task files - individual task management
+# Note: Track live tasks.json for persistence; keep other task artifacts ignored
+.taskmaster/tasks/task_*.txt
+.taskmaster/state.json
+.taskmaster/reports/
+
+# Reference directories
+reference/Mantra-Ultimate-Assistant/ 
+.vercel
+
+# Task files
+# tasks.json
+# tasks/

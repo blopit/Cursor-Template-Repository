@@ -1,0 +1,107 @@
+# PR Title Validation Rule
+
+## Required PR Title Formats
+
+**All PR titles MUST follow one of these exact formats:**
+
+### Task-Based Format (Preferred)
+- `Task XX: description` - For main tasks
+- `Task XX.X: description` - For subtasks
+
+### Conventional Commit Format (Alternative)
+- `type: description` - Simple format
+- `type(scope): description` - With scope
+
+## Valid Types for Conventional Format
+- **feat**: New features
+- **fix**: Bug fixes  
+- **docs**: Documentation changes
+- **style**: Code style/formatting
+- **refactor**: Code restructuring
+- **test**: Adding/updating tests
+- **chore**: Maintenance tasks
+- **perf**: Performance improvements
+- **ci**: CI/CD changes
+
+## Examples
+
+### ✅ CORRECT Examples
+```
+Task 16: Implement Enhanced Monitoring System
+Task 22.3: Add Configurable Timing Tolerances
+feat: add new authentication system
+feat(auth): implement OAuth2 integration
+fix(api): resolve timeout issue
+docs: update API documentation
+style(ui): improve button styling
+refactor(core): simplify delegation logic
+test(unit): add missing test coverage
+chore(deps): update dependencies
+```
+
+### ❌ INCORRECT Examples
+```
+📊 docs: comprehensive GitHub issues analysis report  # No emoji prefixes
+Docs: update readme  # Wrong capitalization
+Add new feature  # Missing type prefix
+Task: implement feature  # Missing task number
+Task ABC: invalid format  # Task number must be numeric
+FEAT: new feature  # Wrong capitalization
+```
+
+## Implementation Guidelines
+
+### Before Creating PRs
+1. **Check task number** in your task management system
+2. **Use exact format** - no deviations allowed
+3. **Keep description clear** and concise
+4. **No emoji prefixes** or special characters at start
+5. **Use lowercase** for conventional commit types
+
+### For Task-Based PRs
+- Always include the task number from your project management
+- Use main task number (e.g., `Task 16:`) for primary features
+- Use subtask number (e.g., `Task 16.2:`) for specific components
+
+### For Non-Task PRs
+- Use conventional commit format
+- Choose the most appropriate type
+- Include scope in parentheses when relevant
+- Keep description descriptive but concise
+
+## Validation Rules
+
+The GitHub workflow validates:
+1. **Format compliance** - Must match one of the required patterns
+2. **Type validity** - Only allowed conventional commit types
+3. **Case sensitivity** - Types must be lowercase
+4. **Number format** - Task numbers must be numeric
+
+## Common Mistakes to Avoid
+
+- **Emoji prefixes**: Never start titles with emojis (❌ `📊 docs:`)
+- **Wrong capitalization**: Use lowercase for types (❌ `Docs:`, ✅ `docs:`)
+- **Missing task numbers**: Task format requires numbers (❌ `Task: description`)
+- **Invalid characters**: Stick to alphanumeric and allowed punctuation
+- **Inconsistent format**: Pick one format and stick to it
+
+## Quick Reference
+
+```bash
+# Task format
+Task [NUMBER]: [DESCRIPTION]
+Task [NUMBER].[SUBTASK]: [DESCRIPTION]
+
+# Conventional format  
+[type]: [description]
+[type]([scope]): [description]
+```
+
+## Related Rules
+- [git-automation](mdc:.cursor/rules/git-automation.mdc) - Git workflow rules
+- [documentation-standards](mdc:.cursor/rules/documentation-standards.mdc) - Documentation guidelines
+
+## Enforcement
+This rule is automatically enforced by GitHub workflows. PRs with invalid titles will fail the validation check and cannot be merged until the title is corrected.
+
+**Remember**: The title validation is case-sensitive and format-strict. When in doubt, use the task-based format with your current task number.

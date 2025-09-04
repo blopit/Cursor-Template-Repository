@@ -1,0 +1,38 @@
+---
+description: Always use MVP tag for Taskmaster operations, never human tag
+globs: **/*
+alwaysApply: true
+---
+
+# Taskmaster Tag Usage Rule
+
+## Core Requirement
+- **ALWAYS use the "MVP" tag** when working with Taskmaster operations
+- **NEVER use the "human" tag** - human tasks are NOT for AI agents
+- Switch to MVP tag at the start of any Taskmaster session
+
+## Implementation
+- Before any Taskmaster operation, ensure you're on the MVP tag
+- Use `use_tag` tool to switch to "MVP" if not already active
+- All task operations (get_tasks, next_task, etc.) should work with MVP tag
+
+## Commands Affected
+- get_tasks
+- next_task
+- get_task
+- expand_task
+- add_task
+- update_task
+- set_task_status
+- All other Taskmaster MCP tools
+
+## Tag Switching
+```
+# Always start with this
+mcp_taskmaster-ai_use_tag(name="MVP")
+```
+
+## Forbidden
+- Never work with "human" tagged tasks
+- Never assume current tag without checking
+- Never mix human and MVP tasks

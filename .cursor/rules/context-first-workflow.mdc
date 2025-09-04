@@ -1,0 +1,72 @@
+---
+description: Enforces reading context documents first before any task implementation
+globs: "**/*"
+alwaysApply: true
+---
+
+# Context-First Workflow Rule
+
+## Critical Requirement
+- **ALWAYS read context documents FIRST** before starting any task implementation
+- This is Step 2 of the default.md workflow and is MANDATORY
+- Context documents are located in `.taskmaster/context/` directory
+
+## Context Document Locations
+- **Task Context**: `.taskmaster/context/task_XX_context.md` 
+- **Subtask Context**: `.taskmaster/context/task_XX_subtask_YY_context.md`
+- Contains implementation requirements, specifications, and architectural guidelines
+
+## Workflow Steps
+1. **Get Task**: Use `get_task` to understand basic requirements
+2. **🚨 READ CONTEXT DOCS**: Load context documents BEFORE planning implementation
+3. **Implementation Planning**: Use context specifications to plan approach
+4. **Development Execution**: Follow context document requirements exactly
+
+## Context Document Contents
+- **Prerequisites**: What must be completed first
+- **Success Criteria**: Specific deliverables and requirements
+- **Implementation Guidelines**: Exact code specifications and patterns
+- **Integration Points**: How to connect with existing systems
+- **Testing Strategy**: How to validate the implementation
+- **Security Considerations**: Security requirements and patterns
+
+## Examples
+
+### ✅ Correct Approach
+```
+1. get_task("1.10") 
+2. Read .taskmaster/context/task_01_subtask_10_context.md  ← CRITICAL
+3. Plan implementation per context specs
+4. Implement following context guidelines exactly
+```
+
+### ❌ Incorrect Approach (What I Did Initially)
+```
+1. get_task("1.10")
+2. Research best practices independently  ← WRONG
+3. Create my own implementation plan     ← WRONG  
+4. Implement without context specs      ← WRONG
+```
+
+## Consequences of Skipping Context
+- **Wasted Time**: Implementing wrong approach, then rework
+- **Specification Mismatch**: Implementation doesn't match requirements
+- **Integration Issues**: Code doesn't integrate properly with existing systems
+- **Quality Problems**: Missing security, testing, or architectural requirements
+
+## Benefits of Context-First
+- **Precise Implementation**: Matches exact project specifications
+- **Faster Development**: Clear requirements eliminate guesswork
+- **Quality Assurance**: Built-in security, testing, and architectural guidance
+- **Integration Success**: Proper connection with existing systems
+
+## Default Workflow Integration
+This rule enforces Step 2 of the default.md workflow:
+- **Step 1**: Task Acquisition
+- **Step 2**: Environment Setup → **Context Loading** ← THIS RULE
+- **Step 3**: Implementation Planning (using context)
+
+## Related Rules
+- [default.mdc](mdc:default.mdc) - Complete workflow requirements
+- [taskmaster.mdc](mdc:taskmaster.mdc) - Task management tools
+- [dev_workflow.mdc](mdc:dev_workflow.mdc) - Development process

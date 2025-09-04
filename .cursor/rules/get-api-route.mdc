@@ -1,0 +1,93 @@
+---
+description: Guidelines for implementing API endpoints using Vercel Functions with Python
+globs: api/**/*.py
+alwaysApply: false
+---
+# Vercel Functions API Guidelines
+
+Guidelines for implementing API endpoints using Vercel Functions with Python for UserProxy MVP:
+
+## Basic Structure
+
+```python
+from vercel import request, response
+import json
+from auth import verify_auth0_token
+from database import get_supabase_client
+import logging
+
+# Type definitions for response structure
+class TileResponse:
+    def __init__(self, tiles: list, count: int):
+        self.tiles = tiles
+        self.count = count
+    
+    def to_dict(self):
+        return {"tiles": self.tiles, "count": self.count}
+
+def handler(request):
+    """Main API handler with auth and error handling"""
+    try:
+        # Verify Auth0 token
+        user = verify_auth0_token(request.headers.get('Authorization'))
+        if not user:
+            return response.json({'error': 'Unauthorized'}, status=401)
+        
+        # Handle different HTTP methods
+        if request.method == 'GET':
+            return handle_get(request, user)
+        elif request.method == 'POST':
+            return handle_post(request, user)
+        else:
+            return response.json({'error': 'Method not allowed'}, status=405)
+            
+    except Exception as e:
+        logging.error(f"API Error: {str(e)}")
+        return response.json({'error': 'Internal server error'}, status=500)
+
+def handle_get(request, user):
+    """Handle GET requests"""
+    user_id = user['sub']
+    
+    # Query Supabase for user data
+    supabase = get_supabase_client()
+    result = supabase.table('tiles').select('*').eq('user_id', user_id).execute()
+    tiles = result.data
+    
+    response_data = TileResponse(tiles=tiles, count=len(tiles))
+    return response.json(response_data.to_dict())
+```
+
+## Key Requirements
+
+- **Authentication**: Always verify Auth0 tokens using `verify_auth0_token()`
+- **Error Handling**: Wrap all handlers in try/catch with proper logging
+- **Database**: Use Supabase client for database operations
+- **Response Format**: Use consistent response structure with type definitions
+- **HTTP Methods**: Handle different methods explicitly
+- **Logging**: Log errors for debugging and monitoring
+
+## Environment Variables
+
+Required in Vercel environment:
+- `AUTH0_DOMAIN`
+- `AUTH0_CLIENT_ID`
+- `AUTH0_CLIENT_SECRET`
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_KEY`
+- `PINECONE_API_KEY`
+- `REDIS_URL`
+
+## File Structure
+
+```
+api/
+├── auth.py          # Auth0 token verification
+├── database.py      # Supabase and Pinecone connections
+├── tiles/
+│   └── index.py     # Tile management endpoints
+├── agents/
+│   └── index.py     # AI agent endpoints
+└── utils/
+    └── helpers.py   # Common utilities
+```

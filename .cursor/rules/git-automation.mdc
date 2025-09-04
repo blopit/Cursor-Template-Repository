@@ -1,0 +1,64 @@
+---
+description: Rules for git workflow automation and commit message standards
+globs: **/*
+---
+# Git Automation Rules
+
+## Commit Guidelines
+
+### Message Format
+- Type: feat|fix|docs|style|refactor|test|chore|perf|ci
+- Scope: (optional) component affected
+- Description: clear, concise change description
+
+Example: feat(auth): implement OAuth2 authentication
+
+**Note**: PR titles must follow strict validation rules (see [pr-title-validation](mdc:.cursor/rules/pr-title-validation.mdc))
+
+### Commit Types
+- feat: New feature
+- fix: Bug fix
+- docs: Documentation changes
+- style: Code style/formatting
+- refactor: Code restructuring
+- test: Adding/updating tests
+- chore: Maintenance tasks
+
+### Pull Request Process
+- **Title must follow required format** (see [pr-title-validation](mdc:.cursor/rules/pr-title-validation.mdc))
+- Reference related issues
+- Include test results
+- Update documentation
+- Pass automated tests
+- Get code review approval
+
+<rule>
+name: git_automation
+description: Rules for git workflow automation
+filters:
+  - type: event
+    pattern: "git_commit|pr_create"
+  - type: content
+    pattern: "git.*commit|pull.*request"
+
+actions:
+  - type: enforce
+    conditions:
+      - pattern: "^(Task \\d+(\\.\\d+)?:|feat|fix|docs|style|refactor|test|chore|perf|ci)(\\([^)]+\\))?:"
+        message: "PR title must follow Task XX: or conventional commit format"
+      - pattern: "^[^📊🔧🚀✨🐛💄♻️📝✅🎉]"
+        message: "No emoji prefixes allowed in PR titles"
+
+  - type: suggest
+    message: |
+      For git operations:
+      1. Follow PR title validation rules
+      2. Use conventional commit format
+      3. Write clear messages
+      4. Reference issues
+      5. Update documentation
+
+metadata:
+  priority: high
+  version: 1.1
+</rule>

@@ -1,187 +1,246 @@
-# Project Template with Taskmaster
+# 🚀 MVP Template Repository
 
-A modern project template equipped with [Taskmaster AI](https://github.com/taskmaster-ai/taskmaster) for intelligent task management and development workflow automation.
+**The fastest way to go from Product Requirements Document (PRD) to a fully-configured, development-ready MVP.**
+
+Transform any product idea into a production-ready development environment in minutes, complete with:
+- ✅ **30+ Architecture Options** - From React to Django, mobile to blockchain
+- ✅ **Popular Tech Stacks** - MERN, T3, Django+React, Next.js+Supabase, and more
+- ✅ **AI-Powered Task Management** - Taskmaster integration with intelligent task generation
+- ✅ **Battle-Tested Rules** - 1000+ cursor rules from awesome-cursor-rules
+- ✅ **Complete Development Workflows** - TDD, CI/CD, testing, deployment patterns
 
 > **🎯 This is a GitHub Template Repository**  
-> Click **"Use this template"** to create a new repository with all the files and configuration pre-configured for your project. You'll get a clean repository with no history, ready to customize for your specific needs.
+> Click **"Use this template"** to create a new repository with all configuration pre-built for your MVP.
 
-## What's Included
+---
 
-- 🤖 **Taskmaster AI Integration** - AI-powered task generation, management, and workflow optimization
-- 📝 **PRD Templates** - Product Requirements Document templates for structured project planning
-- 🏷️ **Tag-Based Task Management** - Multi-context task organization for features, branches, and experiments
-- ⚙️ **Pre-configured Development Environment** - Ready-to-use configuration for modern development workflows
-- 📊 **Task Complexity Analysis** - AI-driven analysis to break down complex tasks into manageable subtasks
+## 🏃‍♂️ Quick Start (2 Commands)
 
-## Quick Start
-
-### 1. Use This Template
-
-**Option A: Use Template Button (Recommended)**
-1. Click the green **"Use this template"** button at the top of this repository
-2. Choose "Create a new repository"
-3. Give your project a name and description
-4. Click "Create repository from template"
-
-**Option B: Clone Manually**
+### **For Python Developers:**
 ```bash
-git clone <your-repo-url>
-cd <your-project-name>
+python3 quick_start.py
 ```
 
-### 2. Install Taskmaster (if not already installed)
+### **For JavaScript/Node.js Developers:**  
 ```bash
-npm install -g task-master-ai
+node quick-start.js
 ```
 
-### 3. Configure Your Project
-The template comes pre-initialized with Taskmaster. Configure your AI models:
-```bash
-task-master models --setup
-```
+**That's it!** The script will:
+1. **Download awesome-cursor-rules** automatically
+2. **Show 30+ architecture options** with descriptions
+3. **Set up your chosen tech stack** with all dependencies
+4. **Create architecture-specific `.env.example`** with relevant variables
+5. **Generate comprehensive `.cursorrules`** file
+6. **Archive unused template files** to keep your project clean
+7. **Create `add_architecture.py/js`** for adding more stacks later
 
-### 4. Create Your Project Requirements
-1. Copy the example PRD template:
-```bash
-cp .taskmaster/templates/example_prd.txt .taskmaster/docs/my-project-prd.txt
-```
+---
 
-2. Edit your PRD with your project details
-3. Generate initial tasks from your PRD:
-```bash
-task-master parse-prd .taskmaster/docs/my-project-prd.txt
-```
+## 🏗️ Available Architectures
 
-### 5. Start Development
-```bash
-# View your tasks
-task-master list
+### **Popular Tech Stacks (Recommended)**
+Perfect combinations for rapid MVP development:
 
-# Get the next task to work on
-task-master next
+| Stack | Description | Best For |
+|-------|-------------|----------|
+| **MERN** | MongoDB + Express + React + Node.js | Full JavaScript MVPs |
+| **T3 Stack** | Next.js + tRPC + Prisma | Type-safe full-stack |
+| **Django + React** | Python backend + React frontend | Content-heavy apps |
+| **FastAPI + React** | Modern Python + React | AI/ML-powered apps |
+| **Next.js + Supabase** | Full-stack with real-time | Social/collaborative apps |
+| **JAMStack** | Next.js + Netlify Functions | Static sites + dynamic features |
+| **Mobile Full-Stack** | React Native + Express | Mobile + backend APIs |
 
-# View specific task details
-task-master show <task-id>
-```
+### **Individual Architectures (30+ Options)**
 
-## Features
+**🌐 Frontend Frameworks:**
+- React + TypeScript, Vue 3, Angular, Svelte, SolidJS
 
-### Intelligent Task Management
-- **AI-Powered Task Generation** - Automatically generate tasks from PRD documents
-- **Complexity Analysis** - AI analyzes task complexity and suggests optimal breakdown
-- **Dependency Management** - Automatic dependency tracking and validation
-- **Progress Tracking** - Real-time status updates and completion tracking
+**📱 Mobile Development:**  
+- React Native + Expo, Flutter, Swift/SwiftUI, Android/Compose
 
-### Multi-Context Development
-- **Tagged Task Lists** - Separate task contexts for different features, branches, or experiments
-- **Git Integration** - Automatic tag creation from branch names
-- **Team Collaboration** - Isolated contexts prevent merge conflicts
+**⚡ Backend APIs:**
+- FastAPI, Django, Flask, Express.js, NestJS, Spring Boot, Rails, Laravel
 
-### Research-Backed Development
-- **Live Research Integration** - Access to current best practices and up-to-date information
-- **Implementation Guidance** - Context-aware suggestions based on your project files
-- **Technology Updates** - Stay current with the latest library versions and security patches
+**☁️ Serverless:**
+- Vercel Functions, Netlify Functions, AWS Lambda
 
-## Project Structure
+**🗄️ Database & ORM:**
+- Prisma + PostgreSQL, Supabase integration
 
-```
-your-project/
-├── .taskmaster/           # Taskmaster configuration and data
-│   ├── config.json       # AI models and settings
-│   ├── state.json        # Current tag context and state
-│   ├── templates/        # PRD and other templates
-│   ├── docs/            # Project documentation and PRDs
-│   ├── tasks/           # Generated task files
-│   └── reports/         # Complexity analysis reports
-├── .cursor/             # Cursor IDE rules and configuration
-├── .env.example         # Environment variables template
-├── .gitignore          # Git ignore patterns
-└── README.md           # This file
-```
+**🧪 Testing:**
+- Cypress, Playwright end-to-end testing
 
-## Workflow Examples
+**⛓️ Blockchain:**
+- Solidity + Hardhat, Solidity + Foundry
 
-### Feature Development
-```bash
-# Create a new feature context
-task-master add-tag feature-auth --description="User authentication system"
+**📝 Language-Specific:**
+- Python, TypeScript, Go, Rust development setups
 
-# Switch to the feature context
-task-master use-tag feature-auth
+---
 
-# Generate tasks for the feature
-task-master parse-prd docs/auth-feature-prd.txt --tag feature-auth
+## 🎯 Complete MVP Development Workflow
 
-# Start development
-task-master next
-```
-
-### Multi-Developer Teams
-```bash
-# Each developer creates their own context
-task-master add-tag alice-work --copy-from-current
-task-master use-tag alice-work
-
-# Work independently without conflicts
-# Merge contexts when ready
-```
-
-### Experiment Management
-```bash
-# Try out new technologies safely
-task-master add-tag experiment-nextjs --description="Next.js migration experiment"
-task-master use-tag experiment-nextjs
-
-# If successful, promote to main
-# If not, simply delete the tag
-task-master delete-tag experiment-nextjs
-```
-
-## Customization
-
-### AI Models
-Configure different AI models for different purposes:
-- **Main Model** - Primary task generation and updates
-- **Research Model** - Live research and current best practices
-- **Fallback Model** - Backup when primary model is unavailable
+### **1. PRD to Production Pipeline**
+This template includes a comprehensive workflow that takes you from PRD to production-ready code:
 
 ```bash
-task-master models --set-main claude-3-7-sonnet-20250219
-task-master models --set-research sonar-pro
-task-master models --set-fallback gpt-4
+# 1. Set up your architecture
+python3 quick_start.py  # Choose from 30+ options
+
+# 2. Follow the AI-powered MVP workflow  
+# See: dev_tools/prompts/workflow/mvp_setup_workflow.md
 ```
 
-### Rules and Patterns
-The template includes Cursor IDE rules for consistent development patterns. Customize `.cursor/rules/` to match your coding standards.
+**The MVP workflow handles:**
+- ✅ **PRD Analysis** - Extract requirements, constraints, success criteria
+- ✅ **Architecture Selection** - AI-recommended tech stacks based on requirements  
+- ✅ **Environment Setup** - Complete dev environment with all tooling
+- ✅ **Task Generation** - Break PRD into actionable development tasks
+- ✅ **Context Creation** - Detailed task context documents for developers
+- ✅ **Development Ready** - Immediate handoff to development team
 
-## Environment Variables
+### **2. Architecture-Specific Environment**
+Every architecture includes optimized configuration:
 
-Copy `.env.example` to `.env` and configure:
+- **📦 Dependencies** - All required packages and dev dependencies
+- **🔧 Scripts** - Dev server, build, test, deploy commands
+- **📋 Environment Variables** - Architecture-specific `.env.example`
+- **📏 Code Standards** - ESLint, Prettier, TypeScript configs
+- **🧪 Testing Setup** - Jest, Cypress, framework-specific testing
+- **📚 Documentation** - Setup guides and development workflows
+
+### **3. AI-Powered Development**
+Integration with Taskmaster AI for intelligent development:
+
+- **🤖 Task Generation** - Auto-generate tasks from PRD
+- **📊 Complexity Analysis** - AI analyzes and breaks down complex tasks
+- **🔗 Dependency Management** - Automatic dependency tracking
+- **📈 Progress Tracking** - Real-time status and completion tracking
+- **🔍 Research Integration** - Access to current best practices
+
+---
+
+## 📁 Project Structure (After Setup)
+
+```
+my-mvp/                    # Your clean, production-ready project
+├── src/                   # Source code (architecture-specific)
+├── .cursorrules          # Consolidated rules for your architecture
+├── .env.example          # Architecture-specific environment variables
+├── .mvp-config.json      # Current architecture info (for other agents)
+├── package.json          # Dependencies and scripts
+├── requirements.txt      # Python dependencies (if applicable)
+├── README.md             # Generated project documentation
+├── active_prompts/       # Development workflow prompts
+├── add_architecture.py   # Script to add more architectures later
+└── archive/              # Original template files (archived)
+```
+
+**Template files are automatically archived** to keep your project clean!
+
+---
+
+## 🚀 Usage Examples
+
+### **Web Application MVP**
 ```bash
-cp .env.example .env
+python3 quick_start.py
+# Choose: "Next.js + Supabase" 
+# Result: Full-stack web app with auth, database, real-time features
 ```
 
-Required API keys (add the ones you'll use):
-- `ANTHROPIC_API_KEY` - For Claude models
-- `OPENAI_API_KEY` - For GPT models  
-- `PERPLEXITY_API_KEY` - For research capabilities
-- `GOOGLE_API_KEY` - For Gemini models
+### **Mobile App MVP**  
+```bash
+node quick-start.js
+# Choose: "React Native + Expo"
+# Result: Cross-platform mobile app with development tools
+```
 
-## Contributing
+### **AI/ML Product MVP**
+```bash
+python3 quick_start.py  
+# Choose: "FastAPI + React"
+# Result: Python ML backend + React frontend
+```
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Use Taskmaster to manage your development: `task-master add-tag feature-amazing-feature --from-branch`
-4. Commit your changes: `git commit -m 'Add amazing feature'`
-5. Push to the branch: `git push origin feature/amazing-feature`
-6. Open a Pull Request
+### **E-commerce MVP**
+```bash
+python3 quick_start.py
+# Choose: "Django + React" 
+# Result: Django backend + React storefront
+```
 
-## License
+---
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 🔄 Adding More Architectures Later
 
-## Resources
+After initial setup, easily add additional architectures:
 
-- [Taskmaster Documentation](https://github.com/taskmaster-ai/taskmaster)
-- [Cursor IDE](https://cursor.sh/)
-- [AI Development Best Practices](https://docs.taskmaster.dev/best-practices)
+```bash
+# Python projects
+python3 add_architecture.py
+
+# JavaScript projects  
+node add_architecture.js
+```
+
+**Perfect for:**
+- Adding mobile app to existing web product
+- Adding admin dashboard to existing API
+- Experimenting with new tech stacks
+- Supporting multiple platforms
+
+---
+
+## 🌟 What Makes This Different
+
+### **Battle-Tested Rules**
+- **1000+ Cursor Rules** from awesome-cursor-rules repository
+- **Architecture-Specific** - Only relevant rules for your chosen stack
+- **Automatically Updated** - Rules are downloaded and mapped intelligently
+
+### **Smart Environment Setup**
+- **Architecture-Aware** `.env.example` with relevant variables only
+- **No Generic Templates** - Each stack gets optimized configuration
+- **Production-Ready** - All best practices built in
+
+### **Complete Workflow Integration**
+- **PRD → Tasks → Code** - Complete development pipeline
+- **AI Task Management** - Intelligent breakdown of complex features
+- **Context Documentation** - Every task includes detailed implementation guidance
+
+### **Clean Handoff**
+- **No Template Bloat** - Unused files automatically archived
+- **Development Ready** - Team can start coding immediately
+- **Extensible** - Easy to add more architectures later
+
+---
+
+## 📖 Documentation
+
+- **[MVP Setup Workflow](dev_tools/prompts/workflow/mvp_setup_workflow.md)** - Complete PRD-to-development pipeline
+- **[Natural Language Workflow](WORKFLOW.md)** - Human-friendly development guide  
+- **[Architecture Definitions](architectures.json)** - Complete list of available stacks
+- **[Development Prompts](dev_tools/prompts/)** - AI workflow templates
+
+---
+
+## 🤝 Contributing
+
+1. Fork this repository
+2. Add new architecture definitions to `architectures.json`
+3. Create corresponding rules in `.cursor/rules/`
+4. Test with both Python and Node.js quick-start scripts
+5. Submit PR with documentation updates
+
+---
+
+## 📄 License
+
+MIT License - Use this template for any project, commercial or personal.
+
+---
+
+**🎯 Ready to build your MVP? Run `python3 quick_start.py` or `node quick-start.js` and go from idea to development-ready in minutes!**

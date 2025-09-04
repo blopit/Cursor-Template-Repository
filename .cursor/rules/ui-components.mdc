@@ -1,0 +1,109 @@
+---
+description: React Native UI component guidelines using Chakra UI Native and Expo
+globs: app/src/**/*.{tsx,ts}
+alwaysApply: false
+---
+# React Native UI Components
+
+## UI Framework
+- Use Chakra UI Native for components and consistent theming
+- Implement mobile-first design with responsive breakpoints
+- Use Expo Image for optimized image handling
+- Follow React Native design patterns and accessibility guidelines
+
+## Component Installation
+
+```bash
+npm install @chakra-ui/react-native
+# or
+yarn add @chakra-ui/react-native
+```
+
+## Theme Configuration
+Set up Chakra UI theme in your app root:
+
+```tsx
+import { ChakraProvider } from '@chakra-ui/react-native'
+import { theme } from './src/theme'
+
+export default function App() {
+  return (
+    <ChakraProvider theme={theme}>
+      {/* Your app content */}
+    </ChakraProvider>
+  )
+}
+```
+
+## Common Components
+
+### Buttons
+```tsx
+import { Button } from '@chakra-ui/react-native'
+
+<Button
+  variant="solid"
+  colorScheme="primary"
+  onPress={handlePress}
+  isLoading={isLoading}
+>
+  Submit
+</Button>
+```
+
+### Input Fields
+```tsx
+import { Input, FormControl, FormLabel } from '@chakra-ui/react-native'
+
+<FormControl isInvalid={!!errors.email}>
+  <FormLabel>Email</FormLabel>
+  <Input
+    placeholder="Enter email"
+    value={email}
+    onChangeText={setEmail}
+    keyboardType="email-address"
+    autoCapitalize="none"
+  />
+</FormControl>
+```
+
+### Layout Components
+```tsx
+import { VStack, HStack, Box, Flex } from '@chakra-ui/react-native'
+
+<VStack space={4} p={4}>
+  <Box bg="white" p={4} borderRadius="md" shadow={2}>
+    <Text>Tile Content</Text>
+  </Box>
+</VStack>
+```
+
+## Tile System Components
+For UserProxy's swipeable tiles:
+
+```tsx
+import { PanGestureHandler } from 'react-native-gesture-handler'
+import Animated from 'react-native-reanimated'
+
+const TileCard = ({ children, onSwipeRight, onSwipeLeft }) => {
+  return (
+    <PanGestureHandler onGestureEvent={handleGesture}>
+      <Animated.View style={[styles.tile, animatedStyle]}>
+        {children}
+      </Animated.View>
+    </PanGestureHandler>
+  )
+}
+```
+
+## Image Handling
+```tsx
+import { Image } from 'expo-image'
+
+<Image
+  source={{ uri: imageUrl }}
+  style={{ width: 100, height: 100 }}
+  contentFit="cover"
+  transition={1000}
+/>
+``` 

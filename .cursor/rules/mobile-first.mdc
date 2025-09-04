@@ -1,0 +1,19 @@
+---
+description: Mobile-first responsive design for frontend components
+globs: src/**/*.{tsx,jsx,css,scss}
+alwaysApply: false
+---
+
+# Mobile-First Frontend Development
+
+## Core Principles
+- Design for mobile devices first
+- Progressive enhancement for larger screens
+- Touch-friendly interfaces (44px+ touch targets)
+- Readable typography (16px+ on mobile)
+
+## Implementation
+- Start with mobile styles (no media queries)
+- Use min-width media queries for larger screens
+- Stack form fields vertically on mobile
+- Test on 320px to 1920px+ screens
